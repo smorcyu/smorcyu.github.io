@@ -260,3 +260,12 @@ ul.navbar {
     position: relative;
     top: 10px;
 }
+
+#home, #services, #about, #gallery, #contact {
+    font-weight: bold;
+    font-size: larger;
+    font-family: serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+}
