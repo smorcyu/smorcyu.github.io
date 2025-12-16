@@ -1,1 +1,113 @@
-hello world
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>For You ❤️</title>
+	<style>
+		:root{--bg1:#ffafbd;--bg2:#ffc3a0;--accent:#ff416c}
+		html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+		body{display:grid;place-items:center;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:#fff}
+		.page{max-width:900px;padding:24px;text-align:center}
+		h1{font-size:2.4rem;margin:0 0 8px}
+		p.lead{opacity:.95;margin:0 0 18px}
+
+		/* Overlay modal */
+		.overlay{position:fixed;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.35);backdrop-filter:blur(3px);z-index:9999}
+		.modal{background:linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border-radius:16px;padding:28px 28px 20px;box-shadow:0 12px 40px rgba(0,0,0,.35);width:min(680px,92%);text-align:center;color:#fff}
+
+		/* Heart */
+		.heart{width:160px;height:160px;margin:0 auto 14px;display:block}
+		.heart svg{width:100%;height:100%;filter:drop-shadow(0 6px 18px rgba(255,65,108,.25))}
+		.beat{animation:beat 1.1s infinite cubic-bezier(.33,.7,.4,1)}
+		@keyframes beat{0%{transform:scale(1)}25%{transform:scale(1.12)}40%{transform:scale(1)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+
+		.message{font-size:1.05rem;margin-bottom:16px}
+		.small{opacity:.9;font-size:.95rem}
+
+		.actions{display:flex;gap:12px;justify-content:center;margin-top:8px}
+		.btn{background:transparent;border:2px solid rgba(255,255,255,.18);color:#fff;padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:600}
+		.btn.primary{background:linear-gradient(90deg,var(--accent),#ff7aa2);border:none}
+		.btn:active{transform:translateY(1px)}
+
+		/* subtle floating hearts in background */
+		.float-heart{position:fixed;pointer-events:none;opacity:.12;mix-blend-mode:screen}
+	</style>
+</head>
+<body>
+	<main class="page">
+		<h1>Open this link for me, my love</h1>
+		<p class="lead">A little surprise just for you — click the heart if it doesn't appear.</p>
+		<button id="openBtn" class="btn primary">Open the Surprise ❤️</button>
+	</main>
+
+	<div id="overlay" class="overlay" aria-hidden="true" style="display:none">
+		<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+			<div class="heart" aria-hidden="true">
+				<svg viewBox="0 0 512 512" class="beat" xmlns="http://www.w3.org/2000/svg" fill="none">
+					<defs>
+						<linearGradient id="g" x1="0" x2="1">
+							<stop offset="0" stop-color="#ff416c"/>
+							<stop offset="1" stop-color="#ff7aa2"/>
+						</linearGradient>
+					</defs>
+					<path d="M256 448s-192-112-192-256a96 96 0 0 1 160-72 96 96 0 0 1 64-24 96 96 0 0 1 64 24 96 96 0 0 1 160 72c0 144-192 256-192 256z" fill="url(#g)" stroke="rgba(255,255,255,0.12)" stroke-width="6"/>
+				</svg>
+			</div>
+			<h2 id="modalTitle">For you, always ❤️</h2>
+			<p class="message">Every moment with you fills my heart. I hope this little surprise makes you smile.</p>
+			<div class="actions">
+				<button id="closeBtn" class="btn">Close</button>
+				<button id="shareBtn" class="btn primary">Send a kiss 😘</button>
+			</div>
+			<p class="small">Tip: tap anywhere outside to close.</p>
+		</div>
+	</div>
+
+	<script>
+		const overlay = document.getElementById('overlay');
+		const openBtn = document.getElementById('openBtn');
+		const closeBtn = document.getElementById('closeBtn');
+		const shareBtn = document.getElementById('shareBtn');
+
+		function show() {
+			overlay.style.display = 'grid';
+			overlay.setAttribute('aria-hidden','false');
+			document.body.style.overflow = 'hidden';
+		}
+		function hide() {
+			overlay.style.display = 'none';
+			overlay.setAttribute('aria-hidden','true');
+			document.body.style.overflow = '';
+		}
+
+		// Auto-show on first load
+		window.addEventListener('DOMContentLoaded', ()=>{
+			// small delay for a gentle entrance
+			setTimeout(show, 350);
+		});
+
+		openBtn.addEventListener('click', show);
+		closeBtn.addEventListener('click', hide);
+		overlay.addEventListener('click', (e)=>{
+			if (e.target === overlay) hide();
+		});
+
+		shareBtn.addEventListener('click', async ()=>{
+			const text = 'Sending you all my love ❤️';
+			try {
+				if (navigator.share) {
+					await navigator.share({title:'Love',text});
+				} else if (navigator.clipboard) {
+					await navigator.clipboard.writeText(text);
+					alert('Message copied to clipboard — send it with a kiss 💋');
+				} else {
+					alert(text);
+				}
+			} catch (err) {
+				console.log(err);
+			}
+		});
+	</script>
+</body>
+</html>
