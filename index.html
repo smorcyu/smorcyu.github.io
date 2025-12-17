@@ -18,10 +18,9 @@
 
 		/* Heart */
 		.heart{width:160px;height:160px;margin:0 auto 14px;display:block}
-		.heart svg{width:100%;height:100%;filter:drop-shadow(0 6px 18px rgba(255,65,108,.25))}
-		.beat{animation:beat 1.1s infinite cubic-bezier(.33,.7,.4,1)}
-		@keyframes beat{0%{transform:scale(1)}25%{transform:scale(1.12)}40%{transform:scale(1)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
-
+			.heart svg{width:140px;height:140px;display:block;filter:drop-shadow(0 8px 20px rgba(255,65,108,.22))}
+			.beat{animation:beat 1000ms infinite cubic-bezier(.33,.7,.4,1);transform-origin:center center}
+			@keyframes beat{0%{transform:scale(1) rotate(0deg)}25%{transform:scale(1.14) rotate(-3deg)}40%{transform:scale(1) rotate(0deg)}60%{transform:scale(1.08) rotate(3deg)}100%{transform:scale(1) rotate(0deg)}}
 		.message{font-size:1.05rem;margin-bottom:16px}
 		.small{opacity:.9;font-size:.95rem}
 
@@ -36,24 +35,27 @@
 </head>
 <body>
 	<main class="page">
-		<h1>Open this link for me, my love</h1>
-		<p class="lead">A little surprise just for you — click the heart if it doesn't appear.</p>
+		<!-- Title and subtitle removed per request (minimal landing) -->
 		<button id="openBtn" class="btn primary">Open the Surprise ❤️</button>
 	</main>
 
 	<div id="overlay" class="overlay" aria-hidden="true" style="display:none">
 		<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
 			<div class="heart" aria-hidden="true">
-				<svg viewBox="0 0 512 512" class="beat" xmlns="http://www.w3.org/2000/svg" fill="none">
+				<!-- Replaced with a cleaner heart SVG and refined animation -->
+				<svg viewBox="0 0 48 48" class="beat" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 					<defs>
 						<linearGradient id="g" x1="0" x2="1">
 							<stop offset="0" stop-color="#ff416c"/>
 							<stop offset="1" stop-color="#ff7aa2"/>
 						</linearGradient>
+						<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+							<feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#ff416c" flood-opacity="0.28"/>
+						</filter>
 					</defs>
-					<path d="M256 448s-192-112-192-256a96 96 0 0 1 160-72 96 96 0 0 1 64-24 96 96 0 0 1 64 24 96 96 0 0 1 160 72c0 144-192 256-192 256z" fill="url(#g)" stroke="rgba(255,255,255,0.12)" stroke-width="6"/>
+					<path d="M24 42s-18.5-11.7-18.5-22.5A9.5 9.5 0 0 1 24 10a9.5 9.5 0 0 1 18.5 9.5C42.5 30.3 24 42 24 42z" fill="url(#g)" filter="url(#shadow)"/>
 				</svg>
-			</div>
+			</div> 
 			<h2 id="modalTitle">爱你宝宝</h2>
 			<p class="message">Every moment with you fills my heart. I hope this little surprise makes you smile.</p>
 			<div class="actions">
