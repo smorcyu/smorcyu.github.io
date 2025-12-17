@@ -81,11 +81,8 @@
 			document.body.style.overflow = '';
 		}
 
-		// Auto-show on first load
-		window.addEventListener('DOMContentLoaded', ()=>{
-			// small delay for a gentle entrance
-			setTimeout(show, 350);
-		});
+		// Do NOT auto-show on load; user must tap the button to reveal the surprise.
+		// (Removes automatic modal display so the page is not intrusive.)
 
 		openBtn.addEventListener('click', show);
 		closeBtn.addEventListener('click', hide);
@@ -93,6 +90,7 @@
 			if (e.target === overlay) hide();
 		});
 
+		// Share/copy functionality (kept as a utility)
 		shareBtn.addEventListener('click', async ()=>{
 			const text = 'Sending you all my love ❤️';
 			try {
@@ -108,6 +106,72 @@
 				console.log(err);
 			}
 		});
+
+		// ========== Give a kiss feature ===========
+		// Creates a little flying heart animation from the button into the modal
+		const kissBtn = document.createElement('button');
+		kissBtn.className = 'btn primary';
+		kissBtn.id = 'kissBtn';
+		kissBtn.textContent = 'Give a kiss 😘';
+		kissBtn.style.marginLeft = '6px';
+
+		// Insert kiss button next to share button
+		shareBtn.parentNode.insertBefore(kissBtn, shareBtn.nextSibling);
+
+		// kiss animation CSS (injected at runtime for simplicity)
+		const style = document.createElement('style');
+		style.textContent = `
+			.kiss-bubble{position:fixed;z-index:10000;font-size:28px;pointer-events:none;transform:translate(-50%,-50%);opacity:0}
+			@keyframes kissFly{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}60%{opacity:1;transform:translate(-50%,-160%) scale(1.3)}100%{opacity:0;transform:translate(-50%,-220%) scale(0.6)}
+		`;
+		document.head.appendChild(style);
+
+		async function doKiss(e){
+			// Create the floating heart element
+			const b = document.createElement('div');
+			b.className = 'kiss-bubble';
+			b.textContent = '💋';
+			document.body.appendChild(b);
+
+			// Position at button
+			const rect = e.currentTarget.getBoundingClientRect();
+			b.style.left = (rect.left + rect.width/2) + 'px';
+			b.style.top = (rect.top + rect.height/2) + 'px';
+
+			// Trigger animation via inline style (uses CSS keyframes)
+			b.style.animation = 'kissFly 1100ms ease-out forwards';
+
+			// Optional: small 'pop' sound using WebAudio (no external files)
+			try{
+				const ctx = new (window.AudioContext || window.webkitAudioContext)();
+				const o = ctx.createOscillator();
+				const g = ctx.createGain();
+				o.type = 'sine';
+				o.frequency.value = 880; // high-pitched pop
+				g.gain.value = 0.0001;
+				o.connect(g); g.connect(ctx.destination);
+				const now = ctx.currentTime;
+				g.gain.setValueAtTime(0.0001, now);
+				g.gain.exponentialRampToValueAtTime(0.08, now + 0.02);
+				g.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+				o.start(now); o.stop(now + 0.2);
+			}catch(_){/* ignore if audio blocked */}
+
+			// Also attempt to copy a short message as part of the kiss
+			try{
+				if (navigator.clipboard) await navigator.clipboard.writeText('A kiss from me to you 😘');
+			}catch(_){ }
+
+			// Remove element after animation
+			setTimeout(()=>{ b.remove(); }, 1200);
+
+			// Give visual feedback in modal
+			const old = shareBtn.textContent;
+			shareBtn.textContent = 'Kiss sent! 💌';
+			setTimeout(()=>{ shareBtn.textContent = old; }, 1800);
+		}
+
+		kissBtn.addEventListener('click', doKiss);
 	</script>
 </body>
 </html>
