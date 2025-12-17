@@ -17,10 +17,13 @@
 		.modal{background:linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border-radius:16px;padding:28px 28px 20px;box-shadow:0 12px 40px rgba(0,0,0,.35);width:min(680px,92%);text-align:center;color:#fff}
 
 		/* Heart */
-		.heart{width:160px;height:160px;margin:0 auto 14px;display:block}
-			.heart svg{width:140px;height:140px;display:block;filter:drop-shadow(0 8px 20px rgba(255,65,108,.22))}
-			.beat{animation:beat 1000ms infinite cubic-bezier(.33,.7,.4,1);transform-origin:center center}
-			@keyframes beat{0%{transform:scale(1) rotate(0deg)}25%{transform:scale(1.14) rotate(-3deg)}40%{transform:scale(1) rotate(0deg)}60%{transform:scale(1.08) rotate(3deg)}100%{transform:scale(1) rotate(0deg)}}
+			.heart{width:160px;height:160px;margin:0 auto 14px;display:block;position:relative}
+			.css-heart{width:120px;height:120px;background:linear-gradient(90deg,var(--accent),#ff7aa2);position:relative;margin:0 auto;transform:rotate(-45deg);filter:drop-shadow(0 8px 20px rgba(255,65,108,.22))}
+			.css-heart::before,.css-heart::after{content:'';position:absolute;width:120px;height:120px;border-radius:50%;background:inherit}
+			.css-heart::before{top:-60px;left:0}
+			.css-heart::after{left:60px;top:0}
+			.beat{animation:beat 900ms infinite cubic-bezier(.33,.7,.4,1);transform-origin:center center}
+			@keyframes beat{0%{transform:scale(1) rotate(0deg)}20%{transform:scale(1.18) rotate(-2deg)}40%{transform:scale(1) rotate(0deg)}60%{transform:scale(1.08) rotate(2deg)}100%{transform:scale(1) rotate(0deg)}}
 		.message{font-size:1.05rem;margin-bottom:16px}
 		.small{opacity:.9;font-size:.95rem}
 
@@ -43,20 +46,9 @@
 	<div id="overlay" class="overlay" aria-hidden="true" style="display:none">
 		<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
 			<div class="heart" aria-hidden="true">
-				<!-- Replaced with a cleaner heart SVG and refined animation -->
-				<svg viewBox="0 0 48 48" class="beat" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-					<defs>
-						<linearGradient id="g" x1="0" x2="1">
-							<stop offset="0" stop-color="#ff416c"/>
-							<stop offset="1" stop-color="#ff7aa2"/>
-						</linearGradient>
-						<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-							<feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#ff416c" flood-opacity="0.28"/>
-						</filter>
-					</defs>
-					<path d="M24 42s-18.5-11.7-18.5-22.5A9.5 9.5 0 0 1 24 10a9.5 9.5 0 0 1 18.5 9.5C42.5 30.3 24 42 24 42z" fill="url(#g)" filter="url(#shadow)"/>
-				</svg>
-			</div> 
+				<!-- CSS heart for cleaner, symmetrical shape -->
+				<div class="css-heart beat" aria-hidden="true" role="img" aria-label="heart"></div>
+			</div>  
 			<h2 id="modalTitle">爱你宝宝</h2>
 			<p class="message">Every moment with you fills my heart. I hope this little surprise makes you smile.</p>
 			<div class="actions">
