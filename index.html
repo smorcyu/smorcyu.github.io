@@ -54,11 +54,11 @@
 					<path d="M256 448s-192-112-192-256a96 96 0 0 1 160-72 96 96 0 0 1 64-24 96 96 0 0 1 64 24 96 96 0 0 1 160 72c0 144-192 256-192 256z" fill="url(#g)" stroke="rgba(255,255,255,0.12)" stroke-width="6"/>
 				</svg>
 			</div>
-			<h2 id="modalTitle">For you, always ❤️</h2>
+			<h2 id="modalTitle">爱你宝宝</h2>
 			<p class="message">Every moment with you fills my heart. I hope this little surprise makes you smile.</p>
 			<div class="actions">
 				<button id="closeBtn" class="btn">Close</button>
-				<button id="shareBtn" class="btn primary">Send a kiss 😘</button>
+				<!-- 'Send a kiss' removed per request; 'Give a kiss' remains as interactive feature -->
 			</div>
 			<p class="small">Tip: tap anywhere outside to close.</p>
 		</div>
@@ -68,7 +68,7 @@
 		const overlay = document.getElementById('overlay');
 		const openBtn = document.getElementById('openBtn');
 		const closeBtn = document.getElementById('closeBtn');
-		const shareBtn = document.getElementById('shareBtn');
+		// shareBtn removed: no separate "Send a kiss" button anymore
 
 		function show() {
 			overlay.style.display = 'grid';
@@ -90,22 +90,7 @@
 			if (e.target === overlay) hide();
 		});
 
-		// Share/copy functionality (kept as a utility)
-		shareBtn.addEventListener('click', async ()=>{
-			const text = 'Sending you all my love ❤️';
-			try {
-				if (navigator.share) {
-					await navigator.share({title:'Love',text});
-				} else if (navigator.clipboard) {
-					await navigator.clipboard.writeText(text);
-					alert('Message copied to clipboard — send it with a kiss 💋');
-				} else {
-					alert(text);
-				}
-			} catch (err) {
-				console.log(err);
-			}
-		});
+		// No separate share button — 'Give a kiss' handles copy/share behavior.
 
 		// ========== Give a kiss feature ===========
 		// Creates a little flying heart animation from the button into the modal
@@ -115,8 +100,9 @@
 		kissBtn.textContent = 'Give a kiss 😘';
 		kissBtn.style.marginLeft = '6px';
 
-		// Insert kiss button next to share button
-		shareBtn.parentNode.insertBefore(kissBtn, shareBtn.nextSibling);
+		// Insert kiss button into the actions container
+		const actions = document.querySelector('.actions');
+		actions.appendChild(kissBtn);
 
 		// kiss animation CSS (injected at runtime for simplicity)
 		const style = document.createElement('style');
@@ -166,9 +152,9 @@
 			setTimeout(()=>{ b.remove(); }, 1200);
 
 			// Give visual feedback in modal
-			const old = shareBtn.textContent;
-			shareBtn.textContent = 'Kiss sent! 💌';
-			setTimeout(()=>{ shareBtn.textContent = old; }, 1800);
+			const old = kissBtn.textContent;
+			kissBtn.textContent = 'Kiss sent! 💌';
+			setTimeout(()=>{ kissBtn.textContent = old; }, 1800);
 		}
 
 		kissBtn.addEventListener('click', doKiss);
